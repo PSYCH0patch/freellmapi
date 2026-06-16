@@ -58,6 +58,7 @@ imagesRouter.post('/images/generations', async (req: Request, res: Response) => 
   } catch (err: any) {
     const status = err?.status ?? 502;
     const type = status === 400 ? 'invalid_request_error'
+      : status === 402 ? 'rate_limit_error'  // Pollinations concurrent limit; map to OpenAI's nearest type so clients can retry
       : status === 429 ? 'rate_limit_error'
       : 'server_error';
     console.warn(`[images] ${status} ${err?.message ?? 'unknown'}`);
